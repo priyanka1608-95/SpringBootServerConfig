@@ -3,7 +3,9 @@ package com.app.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.app.pojo.EmpPageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.app.pojo.Employee;
 import com.app.service.IEmpService;
+
+import javax.validation.Valid;
 
 @CrossOrigin(allowedHeaders = "*")
 @RestController
@@ -58,6 +62,14 @@ public class EmployeeContoller
 
 		Employee e=service.updateEmp(emp);
 		return new ResponseEntity<>(e,HttpStatus.OK);
+	}
+
+	@PostMapping(value = "/getPaginatedEmps", consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getPaginatedEmployees(@Valid @RequestBody EmpPageRequest empPageRequest)
+	{
+		Page<Employee> page = service.getAllPaginatedEmployees(empPageRequest);
+		return new ResponseEntity<>(page,HttpStatus.OK);
 	}
 
 	
